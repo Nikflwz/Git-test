@@ -57,7 +57,7 @@ public class QaTest {
     }
 
     @Test
-    void findGitRepository() {
+    void findGitWiki() {
         /*
         * 1. Открыть браузер
         * 2. Ввести данные сайта (GitHub)
