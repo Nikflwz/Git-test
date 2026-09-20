@@ -1,85 +1,55 @@
 package ru.bulgakov.qa;
 
-import com.codeborne.selenide.Condition;
+
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.ex.ElementNotFound;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import ru.bulgakov.qa.pages.*;
+import ru.bulgakov.qa.pages.PaymentPage;
+import ru.bulgakov.qa.pages.WelcomePage;
+import ru.bulgakov.qa.pages.WikiArticlePage;
+import ru.bulgakov.qa.pages.YandexSearchPage;
 
-import java.time.Duration;
-
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.open;
 
 public class QaTest {
 
-    @Test
-    void mentoringPriceShouldBe47000Test() {
+    private static final String YANDEX_URL = "https://ya.ru/";
+    private static final String COURSE_HOST = "ivanbulgakovqa.ru";
+    private static final String EXPECTED_PRICE = "47 000.00";
 
+    @BeforeAll
+    static void setUp() {
+        Configuration.browserSize = "1920x1080";
+        Configuration.pageLoadTimeout = 30000;
         Configuration.timeout = 10000;
-        YandexSearchPage yaSearch = new YandexSearchPage();
-        YandexSearchResultsPage yaSearchResults = new YandexSearchResultsPage();
-        WelcomePage welcomePage = new WelcomePage();
-        PaymentPage paymentPage = new PaymentPage();
-        VerifyPrice verifyPrice = new VerifyPrice();
-
-        open("https://ya.ru/");
-
-        yaSearch
-                .search("ivanbulgakovqa")
-                .submit();
-
-        yaSearchResults
-                .closeDefaultBrowserSelectWindow()
-                .openLink("ivanbulgakovqa.ru");
-
-        switchTo().window(1);
-
-        welcomePage
-                .clickPrice();
-
-        paymentPage
-                .clickWantToStartQA()
-                .clickPay();
-
-        switchTo().window(2);
-
-        verifyPrice
-                .checkPrice("47 000.00");
     }
+
     @Test
-    void findGitWiki() {
-        /*
-        * 1. Открыть браузер
-        * 2. Ввести данные сайта (GitHub)
-        * 3. Нажать кнопку поиск
-        * 4. В поисковой выдаче найти нужный сайт и кликнуть на него (GitHub Wiki)
-        * 5. Нажать кнопку "Ссылки"
-        * 6. Проверить что есть ссылка с надписью "GitHub.com"
-        * 7. Открыть браузер
-        * */
+    void coursePriceShouldBe47000Test() {
 
-        Configuration.holdBrowserOpen = true;
+        open(YANDEX_URL, YandexSearchPage.class)
+                .search("ivanbulgakovqa")
+                .closeDefaultBrowserBannerIfAppeared()
+                .openLink(COURSE_HOST)
+                .switchToWindow(1, WelcomePage.class)
+                .openCostSection()
+                .clickWantToQa()
+                .clickRunToPay()
+                .switchToWindow(2, PaymentPage.class)
+                .checkPriceAmount(EXPECTED_PRICE);
+    }
 
-        open("https://ya.ru/");
-        $("#text").setValue("github");
-        $("[type=submit]").click();
+    @Test
+    void githubArticleShouldOpenFromYandexTest() {
+        open(YANDEX_URL, YandexSearchPage.class)
+                .search("github")
+                .closeDefaultBrowserBannerIfAppeared()
+                .openWikiArticle()
+                .switchToWindow(1, WikiArticlePage.class)
+                .checkTitle("GitHub")
+                .checkArticleContains("GitHub.com");
 
-        try {
-            $(".DistributionButtonClose_view_button")
-                    .shouldBe(Condition.visible, Duration.ofSeconds(3))
-                    .click();
-        } catch (ElementNotFound e) {
-            // Попап не появился
-        }
 
-        $$("a[href='https://ru.wikipedia.org/wiki/GitHub']")
-                .findBy(Condition.visible)
-                .scrollIntoView("{block: 'center'}")
-                .click();
-
-        switchTo().window(1);
-        $("#toc-Ссылки").click();
-        $("#mwAsE").shouldHave(Condition.text("GitHub.com"));
     }
 
 }

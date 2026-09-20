@@ -1,22 +1,26 @@
 package ru.bulgakov.qa.pages;
 
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.page;
 
-public class YandexSearchPage {
+public class YandexSearchPage extends BasePage {
 
-    private final SelenideElement searchInput = $("#text");
-    private final SelenideElement submitButton =  $("[type=submit]");
+    private final SelenideElement searchInput = $("#text"),
+            submitButton = $("[type=submit]");
 
-    public YandexSearchPage search(String query) {
+    public YandexSearchPage setSearchQuery(String query) {
         searchInput.setValue(query);
         return this;
     }
 
-    public YandexSearchPage submit() {
+    public YandexSearchResultsPage search(String query) {
+        return setSearchQuery(query).submit();
+    }
+
+    public YandexSearchResultsPage submit() {
         submitButton.click();
-        return this;
+        return page(YandexSearchResultsPage.class);
     }
 }

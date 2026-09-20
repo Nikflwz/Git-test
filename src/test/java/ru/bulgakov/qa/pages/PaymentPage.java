@@ -1,18 +1,16 @@
 package ru.bulgakov.qa.pages;
 
-import static com.codeborne.selenide.Selenide.*;
+import com.codeborne.selenide.SelenideElement;
 
-public class PaymentPage {
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Selenide.$;
 
-    public PaymentPage clickWantToStartQA() {
-        $("[role=button]").click();
+public class PaymentPage extends BasePage {
 
-        return this;
-    }
+    private final SelenideElement priceAmount = $("[class*='price']");
 
-    public PaymentPage clickPay() {
-        $("#sbs-921114964-1741924491598").click();
-
+    public PaymentPage checkPriceAmount(String expectedAmount) {
+        priceAmount.shouldHave(text(expectedAmount));
         return this;
     }
 }
