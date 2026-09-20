@@ -26,5 +26,4 @@ public class WelcomePage extends BasePage {
         return this;
     }
 
-
 }

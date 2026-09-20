@@ -48,8 +48,6 @@ public class QaTest {
                 .switchToWindow(1, WikiArticlePage.class)
                 .checkTitle("GitHub")
                 .checkArticleContains("GitHub.com");
-
-
     }
 
 }

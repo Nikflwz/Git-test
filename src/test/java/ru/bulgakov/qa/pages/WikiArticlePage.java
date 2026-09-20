@@ -6,6 +6,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 
 public class WikiArticlePage extends BasePage {
+
     private final SelenideElement title = $("#firstHeading"),
             articleContent = $("#mw-content-text");
 
@@ -19,4 +20,5 @@ public class WikiArticlePage extends BasePage {
         return this;
     }
 }
+
 
