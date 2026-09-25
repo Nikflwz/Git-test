@@ -1,4 +1,4 @@
-package ru.bulgakov.qa.pages;
+package ru.bulgakov.qa.mentor.pages;
 
 import com.codeborne.selenide.SelenideElement;
 

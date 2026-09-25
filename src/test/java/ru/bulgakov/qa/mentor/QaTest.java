@@ -1,13 +1,9 @@
-package ru.bulgakov.qa;
+package ru.bulgakov.qa.mentor.pages;
 
 
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import ru.bulgakov.qa.pages.PaymentPage;
-import ru.bulgakov.qa.pages.WelcomePage;
-import ru.bulgakov.qa.pages.WikiArticlePage;
-import ru.bulgakov.qa.pages.YandexSearchPage;
 
 import static com.codeborne.selenide.Selenide.open;
 
