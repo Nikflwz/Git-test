@@ -5,8 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 import ru.bulgakov.qa.webshop.dto.CartExpectation;
 
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
@@ -40,11 +39,14 @@ public class WsProductPage {
         }
     }
 
-    public WsProductPage selectProcessor(Processor processor) {
-        int index = processor.getIndex();
+    public WsProductPage selectProcessor(int index) {
         processorOptions.shouldBe(sizeGreaterThan(index));
         processorOptions.get(index).click();
         return this;
+    }
+
+    public WsProductPage selectProcessor(Processor processor) {
+        return selectProcessor(processor.getIndex());
     }
 
     public String getItemName() {
@@ -87,8 +89,8 @@ public class WsProductPage {
         return this;
     }
 
-
     public WsCartPage openCart() {
+        successNotification.should(disappear);
         cartLink.click();
         return new WsCartPage();
     }

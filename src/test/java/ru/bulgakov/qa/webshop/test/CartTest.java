@@ -21,12 +21,12 @@ public class CartTest {
     @Test
     void addItemToCartTest() {
         String quantity = "2";
-        String productName = "0";
+        int productIndex = 0;
 
         WsProductPage productPage = open(WEB_SHOP_URL, WsWelcomePage.class)
                 .openDesktops()
-                .openProduct(productName)
-                .selectProcessor(WsProductPage.Processor.SLOW)
+                .openProduct(productIndex)
+                .selectProcessor(0)
                 .setQuantity(quantity)
                 .addToCart()
                 .checkItemAddedToCart()
