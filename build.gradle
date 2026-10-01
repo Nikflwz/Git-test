@@ -1,12 +1,11 @@
 plugins {
     id 'java'
-    id 'io.qameta.allure' version "4.3.0"
-
+    id 'io.qameta.allure' version '4.3.0'
 }
 
-def allureVersion = "2.35.1"
+def allureVersion = '2.29.0'
 
-allure{
+allure {
     report {
         version.set(allureVersion)
     }
@@ -20,15 +19,10 @@ allure{
     }
 }
 
-group = 'org.example'
-version = '1.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
+repositories { mavenCentral() }
 
 dependencies {
-    testImplementation "io.qameta.allure:allure-jupiter:$allureVersion"
+    testImplementation "io.qameta.allure:allure-junit5:$allureVersion"
     testImplementation "io.qameta.allure:allure-selenide:$allureVersion"
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
     testImplementation 'com.codeborne:selenide:7.18.1'
@@ -37,4 +31,6 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    systemProperty 'file.encoding', 'UTF-8'
+    jvmArgs '-Dfile.encoding=UTF-8'
 }

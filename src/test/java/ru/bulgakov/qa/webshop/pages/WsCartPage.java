@@ -1,6 +1,7 @@
 package ru.bulgakov.qa.webshop.pages;
 
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 import ru.bulgakov.qa.webshop.dto.CartExpectation;
 
 import static com.codeborne.selenide.Condition.attribute;
@@ -12,21 +13,25 @@ public class WsCartPage {
     private final SelenideElement quantityInput = $("input.qty-input");
     private final SelenideElement productSubtotal = $("span.product-subtotal");
 
+    @Step("Проверить, что в корзине товар '{expectedName}'")
     public WsCartPage checkProductName(String expectedName) {
         productName.shouldHave(text(expectedName));
         return this;
     }
 
+    @Step("Проверить, что количество товара = {expectedQuantity}")
     public WsCartPage checkQuantity(String expectedQuantity) {
         quantityInput.shouldHave(attribute("value", expectedQuantity));
         return this;
     }
 
+    @Step("Проверить, что сумма = {expectedSubtotal}")
     public WsCartPage checkSubtotal(String expectedSubtotal) {
         productSubtotal.shouldHave(text(expectedSubtotal));
         return this;
     }
 
+    @Step("Проверить, что корзина соответствует ожиданию")
     public WsCartPage checkMatches(CartExpectation expected) {
         checkProductName(expected.productName());
         checkQuantity(expected.quantity());

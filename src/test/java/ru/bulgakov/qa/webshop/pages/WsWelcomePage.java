@@ -1,6 +1,7 @@
 package ru.bulgakov.qa.webshop.pages;
 
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
@@ -13,17 +14,20 @@ public class WsWelcomePage {
     private final SelenideElement desktopsLink = $(byText("Desktops"));
 
 
+    @Step("Открыть страницу регистрации")
     public WsRegistrationPage openRegistration() {
         registrationButton.click();
         return new WsRegistrationPage();
     }
 
+    @Step("Открыть страницу логина")
     public WsLoginPage openLogin() {
         loginButton.click();
         return new WsLoginPage();
     }
 
-    public WsCatalogPage openDesktops () {
+    @Step("Открыть каталог Desktops через меню")
+    public WsCatalogPage openDesktops() {
         computerMenu.hover();
         desktopsLink.click();
         return new WsCatalogPage();

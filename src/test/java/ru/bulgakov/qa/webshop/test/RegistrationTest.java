@@ -20,7 +20,7 @@ public class RegistrationTest extends TestBase {
     @Owner("n.nikflwz")
     @Tag("positive")
     @Severity(CRITICAL)
-    @Epic("Авторизаиця")
+    @Epic("Авторизация")
     @Feature("Регистрация")
     @Story("Регистрация нового пользователя")
     @Link("TASK-120")

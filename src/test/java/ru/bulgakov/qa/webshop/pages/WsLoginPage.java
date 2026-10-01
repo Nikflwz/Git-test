@@ -15,6 +15,7 @@ public class WsLoginPage {
     private final SelenideElement rememberMeCheckBox = $("input#RememberMe");
     private final SelenideElement loginButton = $("input.login-button");
 
+    @Step("Проверить, что открылась страница логина")
     public WsLoginPage checkLoginPageOpened() {
         pageTitle.shouldHave(text("Welcome, Please Sign In!"));
         return this;
@@ -32,6 +33,7 @@ public class WsLoginPage {
         return this;
     }
 
+    @Step("Поставить галочку 'Remember me'")
     public WsLoginPage checkRememberMe() {
         rememberMeCheckBox.click();
         return this;
@@ -49,6 +51,7 @@ public class WsLoginPage {
         return this;
     }
 
+    @Step("Войти как {email} (remember me: {rememberMe})")
     public WsWelcomePage login(String email, String password, boolean rememberMe) {
         enterEmail(email)
                 .enterPassword(password);
