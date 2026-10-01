@@ -1,24 +1,22 @@
-package ru.bulgakov.qa.mentor.pages;
+package ru.bulgakov.qa.mentor.tests;
 
-
-import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+
+import ru.bulgakov.qa.mentor.pages.PaymentPage;
+import ru.bulgakov.qa.mentor.pages.WelcomePage;
+import ru.bulgakov.qa.mentor.pages.WikiArticlePage;
+import ru.bulgakov.qa.mentor.pages.YandexSearchPage;
+import ru.bulgakov.qa.webshop.test.TestBase;
+
 
 import static com.codeborne.selenide.Selenide.open;
 
-public class QaTest {
+public class QaTest extends TestBase {
 
     private static final String YANDEX_URL = "https://ya.ru/";
     private static final String COURSE_HOST = "ivanbulgakovqa.ru";
     private static final String EXPECTED_PRICE = "47 000.00";
-
-    @BeforeAll
-    static void setUp() {
-        Configuration.browserSize = "1920x1080";
-        Configuration.pageLoadTimeout = 30000;
-        Configuration.timeout = 10000;
-    }
 
     @Test
     void coursePriceShouldBe47000Test() {

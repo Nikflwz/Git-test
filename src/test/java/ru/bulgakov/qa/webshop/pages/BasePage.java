@@ -1,4 +1,4 @@
-package ru.bulgakov.qa.mentor.pages;
+package ru.bulgakov.qa.webshop.pages;
 
 
 import static com.codeborne.selenide.Selenide.page;
