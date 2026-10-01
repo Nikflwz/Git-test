@@ -10,7 +10,7 @@ import ru.bulgakov.qa.webshop.steps.AuthSteps;
 import static com.codeborne.selenide.Selenide.open;
 import static ru.bulgakov.qa.webshop.config.Config.WEB_SHOP_URL;
 
-public class CartTest {
+public class CartTest extends TestBase {
     private final AuthSteps authSteps = new AuthSteps();
 
     @BeforeEach
