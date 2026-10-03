@@ -7,7 +7,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
-public class WsLoginPage {
+public class WsLoginPage extends BasePage {
 
     private final SelenideElement pageTitle = $("div.page-title h1");
     private final SelenideElement inputEmail = $("input#Email");
@@ -26,18 +26,18 @@ public class WsLoginPage {
         return this;
     }
 
-    @Step("Ввести пароль: {password}")
+    @Step("Ввести пароль")
     public WsLoginPage enterPassword(String password) {
         inputPassword.setValue(password);
         return this;
     }
 
-    public WsLoginPage checkRememberMe() {
+    public WsLoginPage clickRememberMe() {
         rememberMeCheckBox.click();
         return this;
     }
 
-    @Step("Подтвердить регистрацию")
+    @Step("Войти в систему")
     public WsWelcomePage submitLogin() {
         loginButton.click();
         return new WsWelcomePage();
@@ -49,14 +49,4 @@ public class WsLoginPage {
         return this;
     }
 
-    public WsWelcomePage login(String email, String password, boolean rememberMe) {
-        enterEmail(email)
-                .enterPassword(password);
-
-        if (rememberMe) {
-            checkRememberMe();
-        }
-
-        return submitLogin();
-    }
 }

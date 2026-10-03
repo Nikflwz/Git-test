@@ -1,8 +1,7 @@
 package ru.bulgakov.qa.mentor.pages;
 
-
-
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 
 import java.time.Duration;
 
@@ -16,6 +15,7 @@ public class YandexSearchResultsPage extends BasePage {
     private final SelenideElement distributionBannerClose = $(".DistributionButtonClose_view_button");
     private final SelenideElement wikiArticleLink = $("a[href*='ru.wikipedia.org/wiki/GitHub']");
 
+    @Step("Закрыть баннер с предложением браузера (если появился)")
     public YandexSearchResultsPage closeDefaultBrowserBannerIfAppeared() {
         if (distributionBannerClose.is(visible, BANNER_TIMEOUT)) {
             distributionBannerClose.click();
@@ -23,12 +23,13 @@ public class YandexSearchResultsPage extends BasePage {
         return this;
     }
 
+    @Step("Открыть ссылку на хост: {host}")
     public YandexSearchResultsPage openLink(String host) {
         $$("a[href*='" + host + "']").filterBy(visible).first().click();
         return this;
-
     }
 
+    @Step("Открыть статью в Википедии")
     public YandexSearchResultsPage openWikiArticle() {
         wikiArticleLink.click();
         return this;

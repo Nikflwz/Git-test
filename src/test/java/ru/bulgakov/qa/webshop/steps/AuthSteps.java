@@ -16,7 +16,7 @@ public class AuthSteps {
                         faker.name().firstName(),
                         faker.name().lastName(),
                         faker.internet().emailAddress(),
-                        faker.name().fullName());
-
+                        faker.internet().password())
+                .checkRegistrationCompleted();
     }
 }

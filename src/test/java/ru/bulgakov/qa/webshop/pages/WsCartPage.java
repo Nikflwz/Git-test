@@ -1,36 +1,34 @@
 package ru.bulgakov.qa.webshop.pages;
 
 import com.codeborne.selenide.SelenideElement;
-import ru.bulgakov.qa.webshop.dto.CartExpectation;
+import io.qameta.allure.Step;
 
-import static com.codeborne.selenide.Condition.attribute;
-import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 
-public class WsCartPage {
+public class WsCartPage extends BasePage {
+
     private final SelenideElement productName = $("a.product-name");
+    private final SelenideElement productUnitPrice = $("span.product-unit-price");
     private final SelenideElement quantityInput = $("input.qty-input");
     private final SelenideElement productSubtotal = $("span.product-subtotal");
 
-    public WsCartPage checkProductName(String expectedName) {
-        productName.shouldHave(text(expectedName));
-        return this;
+    @Step("Прочитать имя товара в корзине")
+    public String getItemName() {
+        return productName.getText();
     }
 
-    public WsCartPage checkQuantity(String expectedQuantity) {
-        quantityInput.shouldHave(attribute("value", expectedQuantity));
-        return this;
+    @Step("Прочитать количество товара")
+    public String getQuantity() {
+        return quantityInput.getValue();
     }
 
-    public WsCartPage checkSubtotal(String expectedSubtotal) {
-        productSubtotal.shouldHave(text(expectedSubtotal));
-        return this;
+    @Step("Прочитать цену за штуку")
+    public String getUnitPrice() {
+        return productUnitPrice.getText();
     }
 
-    public WsCartPage checkMatches(CartExpectation expected) {
-        checkProductName(expected.productName());
-        checkQuantity(expected.quantity());
-        checkSubtotal(expected.subtotal());
-        return this;
+    @Step("Прочитать subtotal")
+    public String getSubtotal() {
+        return productSubtotal.getText();
     }
 }

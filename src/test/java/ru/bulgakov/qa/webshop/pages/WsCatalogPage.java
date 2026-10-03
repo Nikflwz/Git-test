@@ -1,23 +1,18 @@
 package ru.bulgakov.qa.webshop.pages;
 
 import com.codeborne.selenide.ElementsCollection;
+import io.qameta.allure.Step;
 
-import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
-import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Selenide.$$;
 
-public class WsCatalogPage {
+public class WsCatalogPage extends BasePage {
 
-    private final ElementsCollection productCards = $$("div.product-grid div");
+    private final ElementsCollection productLinks = $$("h2.product-title a");
 
-    public WsProductPage openProduct(int index) {
-        productCards.shouldBe(sizeGreaterThan(index));
-        productCards.get(index).click();
-        return new WsProductPage();
-    }
-
+    @Step("Открыть товар '{name}'")
     public WsProductPage openProduct(String name) {
-        productCards.findBy(text(name)).click();
+        productLinks.findBy(exactText(name)).click();
         return new WsProductPage();
     }
 }

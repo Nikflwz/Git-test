@@ -2,97 +2,64 @@ package ru.bulgakov.qa.webshop.pages;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import ru.bulgakov.qa.webshop.dto.CartExpectation;
+import io.qameta.allure.Step;
 
-import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
 
-
-public class WsProductPage {
-
-    private final ElementsCollection processorOptions = $$("dl dd ul li input[type='radio']");
-
+public class WsProductPage extends BasePage {
     private final SelenideElement itemPrice = $("[itemprop=price]");
     private final SelenideElement itemName = $("[itemprop=name]");
+    private final SelenideElement attributes = $("div.attributes");
     private final SelenideElement quantityInput = $("input.qty-input");
     private final SelenideElement addToCartButton = $("input.add-to-cart-button");
     private final SelenideElement successNotification = $("div.bar-notification.success");
-    private final SelenideElement notificationText = $("p.content");
-    private final SelenideElement cartQuantity = $("span.cart-qty");
-    private final SelenideElement cartLink = $("a.ico-cart");
+    private final SelenideElement notificationText = successNotification.$("p.content");
 
-    public enum Processor {
-        SLOW(0),
-        MEDIUM(1),
-        FAST(2);
-
-        private final int index;
-
-        Processor(int index) {
-            this.index = index;
-        }
-
-        public int getIndex() {
-            return index;
-        }
+    private ElementsCollection attributeOptions(String groupTitle) {
+        return attributes.$$("dl dt")
+                .findBy(text(groupTitle))
+                .sibling(0)          // dt → соответствующий dd
+                .$$("li");
     }
 
-    public WsProductPage selectProcessor(int index) {
-        processorOptions.shouldBe(sizeGreaterThan(index));
-        processorOptions.get(index).click();
+    @Step("Выбрать процессор: {processor}")
+    public WsProductPage selectProcessor(String processor) {
+        attributeOptions("Processor")
+                .findBy(text(processor))
+                .$("input")
+                .click();
         return this;
     }
 
-    public WsProductPage selectProcessor(Processor processor) {
-        return selectProcessor(processor.getIndex());
-    }
-
+    @Step("Прочитать имя товара")
     public String getItemName() {
         return itemName.getText();
     }
 
+    @Step("Прочитать цену товара")
     public String getItemPrice() {
         return itemPrice.getText();
     }
 
-    public String calculateSubtotal(String quantity) {
-        float price = Float.parseFloat(getItemPrice());
-        float qty = Float.parseFloat(quantity);
-        return String.valueOf(price * qty);
-    }
-
-    public CartExpectation rememberCartExpectation(String quantity) {
-        return new CartExpectation(getItemName(), quantity, calculateSubtotal(quantity));
-    }
-
+    @Step("Установить количество: {quantity}")
     public WsProductPage setQuantity(String quantity) {
         quantityInput.setValue(quantity);
         return this;
-
     }
 
+    @Step("Добавить товар в корзину")
     public WsProductPage addToCart() {
         addToCartButton.click();
         return this;
     }
 
+    @Step("Проверить уведомление о добавлении")
     public WsProductPage checkItemAddedToCart() {
         successNotification.shouldBe(visible);
         notificationText.shouldHave(text("The product has been added to your"));
         return this;
-    }
-
-    public WsProductPage checkCartQuantity(String expectedQuantity) {
-        cartQuantity.shouldHave(text("(" + expectedQuantity + ")"));
-        return this;
-    }
-
-    public WsCartPage openCart() {
-        successNotification.should(disappear);
-        cartLink.click();
-        return new WsCartPage();
     }
 }
 
