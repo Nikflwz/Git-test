@@ -7,7 +7,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
-public class WsLoginPage {
+public class WsLoginPage extends BasePage {
 
     private final SelenideElement pageTitle = $("div.page-title h1");
     private final SelenideElement inputEmail = $("input#Email");
@@ -15,7 +15,6 @@ public class WsLoginPage {
     private final SelenideElement rememberMeCheckBox = $("input#RememberMe");
     private final SelenideElement loginButton = $("input.login-button");
 
-    @Step("Проверить, что открылась страница логина")
     public WsLoginPage checkLoginPageOpened() {
         pageTitle.shouldHave(text("Welcome, Please Sign In!"));
         return this;
@@ -27,19 +26,18 @@ public class WsLoginPage {
         return this;
     }
 
-    @Step("Ввести пароль: {password}")
+    @Step("Ввести пароль")
     public WsLoginPage enterPassword(String password) {
         inputPassword.setValue(password);
         return this;
     }
 
-    @Step("Поставить галочку 'Remember me'")
-    public WsLoginPage checkRememberMe() {
+    public WsLoginPage clickRememberMe() {
         rememberMeCheckBox.click();
         return this;
     }
 
-    @Step("Подтвердить регистрацию")
+    @Step("Войти в систему")
     public WsWelcomePage submitLogin() {
         loginButton.click();
         return new WsWelcomePage();
@@ -51,15 +49,4 @@ public class WsLoginPage {
         return this;
     }
 
-    @Step("Войти как {email} (remember me: {rememberMe})")
-    public WsWelcomePage login(String email, String password, boolean rememberMe) {
-        enterEmail(email)
-                .enterPassword(password);
-
-        if (rememberMe) {
-            checkRememberMe();
-        }
-
-        return submitLogin();
-    }
 }

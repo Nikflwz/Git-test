@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import ru.bulgakov.qa.webshop.pages.WsWelcomePage;
 
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.open;
 import static io.qameta.allure.SeverityLevel.CRITICAL;
 import static ru.bulgakov.qa.webshop.config.Config.WEB_SHOP_URL;
 
@@ -23,15 +23,12 @@ public class RegistrationTest extends TestBase {
     @Epic("Авторизация")
     @Feature("Регистрация")
     @Story("Регистрация нового пользователя")
-    @Link("TASK-120")
+    @Link(name = "TASK-120", url = "https://example.com/TASK-120")
     @DisplayName("Успешная регистрация нового пользователя")
-    @Description("Создаём нового пользвателя через интерфейс со случайными данным")
-
+    @Description("Создаём нового пользователя через интерфейс со случайными данными")
     void registrationTest() {
-
-        String password = faker.name().fullName();
+        String password = faker.internet().password();
         String email = faker.internet().emailAddress();
-
 
         open(WEB_SHOP_URL, WsWelcomePage.class)
                 .openRegistration()

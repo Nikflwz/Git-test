@@ -1,15 +1,12 @@
 package ru.bulgakov.qa.webshop.pages;
 
-import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
 
-public class WsRegistrationPage {
-
+public class WsRegistrationPage extends BasePage {
     private final SelenideElement maleGenderRadio = $("input#gender-male");
     private final SelenideElement pageTitle = $("div.page-title");
     private final SelenideElement firstNameInput = $("input#FirstName");
@@ -19,7 +16,6 @@ public class WsRegistrationPage {
     private final SelenideElement confirmPasswordInput = $("input#ConfirmPassword");
     private final SelenideElement submitRegistrationButton = $("input#register-button");
     private final SelenideElement resultText = $("div.result");
-    private final ElementsCollection headerLinks = $$("div.header-links ul li a");
 
     @Step("Заполнить форму регистрации: {firstName} {lastName}, email {email}")
     public WsRegistrationPage register(String firstName, String lastName, String email, String password) {
@@ -29,8 +25,7 @@ public class WsRegistrationPage {
                 .enterEmail(email)
                 .enterPassword(password)
                 .enterConfirmPassword(password)
-                .submitRegistration()
-                .checkRegistrationCompleted();
+                .submitRegistration();
         return this;
     }
 
@@ -87,11 +82,4 @@ public class WsRegistrationPage {
         resultText.shouldHave(text("Your registration completed"));
         return this;
     }
-
-    @Step("Проверить, что пользователь {email} залогинен")
-    public WsRegistrationPage checkUserLoggedIn(String email) {
-        headerLinks.get(0).shouldHave(text(email));
-        return this;
-    }
-
 }

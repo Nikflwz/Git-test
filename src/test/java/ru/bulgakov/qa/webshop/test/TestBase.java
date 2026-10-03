@@ -22,14 +22,13 @@ public class TestBase {
 
     @AfterEach
     void after() {
+        Selenide.clearBrowserCookies();
+        Selenide.clearBrowserLocalStorage();
+
         AttachManager.takeScreenshot();
         AttachManager.pageSource();
         AttachManager.browserConsoleLogs();
 
-        Selenide.clearBrowserCookies();
-        Selenide.clearBrowserLocalStorage();
-
         Selenide.closeWebDriver();
     }
-
 }
