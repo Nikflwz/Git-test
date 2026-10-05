@@ -45,3 +45,33 @@ test {
     systemProperty 'run', System.getProperty('run', 'local')
     systemProperties System.getProperties()
 }
+
+task uiTest(type: Test) {
+    useJUnitPlatform{
+        def tag = System.getProperty("tag")
+        // если тег указан, запускаем UI + TAG TEST
+        // если нет, то только UI
+        if (tag != null && !tag.isBlank()) {
+            includeTags("UI & ${tag}")
+        } else  {
+            includeTags("UI")
+        }
+    }
+    systemProperties System.getProperties()
+
+}
+
+task apiTest(type: Test) {
+    useJUnitPlatform{
+        def tag = System.getProperty("tag")
+        // если тег указан, запускаем API + TAG TEST
+        // если нет, то только API
+        if (tag != null && !tag.isBlank()) {
+            includeTags("API & ${tag}")
+        } else  {
+            includeTags("API")
+        }
+    }
+    systemProperties System.getProperties()
+
+}
