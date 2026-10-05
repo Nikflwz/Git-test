@@ -4,6 +4,10 @@ plugins {
 
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
 def allureVersion = "2.35.1"
 
 allure{
@@ -33,8 +37,11 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
     testImplementation 'com.codeborne:selenide:7.18.1'
     testImplementation 'net.datafaker:datafaker:2.7.0'
+    implementation 'org.aeonbits.owner:owner:1.0.12'
 }
 
 test {
     useJUnitPlatform()
+    systemProperty 'run', System.getProperty('run', 'local')
+    systemProperties System.getProperties()
 }
