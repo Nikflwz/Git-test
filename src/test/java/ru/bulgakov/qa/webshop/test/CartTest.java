@@ -1,6 +1,8 @@
 package ru.bulgakov.qa.webshop.test;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.Test;
 import ru.bulgakov.qa.webshop.dto.CartExpectation;
 import ru.bulgakov.qa.webshop.pages.WsProductPage;
@@ -19,6 +21,7 @@ public class CartTest extends TestBase {
     }
 
     @Test
+    @Tags({@Tag("UI"), @Tag("positive")})
     void addItemToCartTest() {
         String quantity = "2";
         int productIndex = 0;
