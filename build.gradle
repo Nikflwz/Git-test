@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'io.qameta.allure' version "4.3.0"
-
+    id 'io.freefair.lombok' version "9.8.0"
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -34,10 +34,15 @@ repositories {
 dependencies {
     testImplementation "io.qameta.allure:allure-jupiter:$allureVersion"
     testImplementation "io.qameta.allure:allure-selenide:$allureVersion"
+    testImplementation "io.qameta.allure:allure-rest-assured:$allureVersion"
+    testImplementation "io.qameta.allure:allure-assertj:$allureVersion"
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
     testImplementation 'com.codeborne:selenide:7.18.1'
     testImplementation 'net.datafaker:datafaker:2.7.0'
     implementation 'org.aeonbits.owner:owner:1.0.12'
+    testImplementation 'io.rest-assured:rest-assured:6.0.1'
+    testImplementation 'tools.jackson.core:jackson-databind:3.2.3'
+    testImplementation 'org.assertj:assertj-core:3.27.7'
 }
 
 test {
