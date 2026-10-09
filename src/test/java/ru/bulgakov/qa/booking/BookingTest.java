@@ -4,22 +4,23 @@ import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import net.datafaker.Faker;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import ru.bulgakov.qa.booking.dto.AuthRequest;
 import ru.bulgakov.qa.booking.dto.AuthResponse;
-import ru.bulgakov.qa.booking.dto.CreateBookingDTO;
-import ru.bulgakov.qa.booking.dto.CreateBookingDTO.BookingDates;
+import ru.bulgakov.qa.booking.dto.BookingDTO;
+import ru.bulgakov.qa.booking.dto.BookingDTO.BookingDates;
 import ru.bulgakov.qa.booking.dto.CreateBookingResponse;
 
-import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BookingTest {
 
     private static final String BOOKING_URL = "https://restful-booker.herokuapp.com";
+    private static final Faker faker = new Faker();
+    private final BookingAPIClient bookingClient = new BookingAPIClient();
+    private static final String USER = "admin", PASSWORD = "password123";
 
     @BeforeAll
     static void setUp() {
@@ -29,15 +30,7 @@ public class BookingTest {
 
     @Test
     void authTest() {
-        String user = "admin";
-        String password = "password123";
-
-        Response resp = given()
-                .contentType(ContentType.JSON)
-                .body(new AuthRequest(user, password))
-                .post(BOOKING_URL + "/auth")
-                .then()
-                .extract().response();
+        Response resp = bookingClient.auth(USER, PASSWORD);
 
         assertThat(resp.statusCode()).isEqualTo(200);
         assertThat(resp.as(AuthResponse.class).getToken()).isNotNull();
@@ -45,43 +38,42 @@ public class BookingTest {
 
     @Test
     void createBookingTest() {
-        CreateBookingResponse resp = given()
-                .contentType(ContentType.JSON)
-                .body(buildBookingRequest())
-                .post(BOOKING_URL + "/booking")
-                .then()
-                .statusCode(200)
-                .extract().as(CreateBookingResponse.class);
+        Response resp = bookingClient.createBooking(buildBookingRequest());
+        assertThat(resp.getStatusCode()).isEqualTo(200);
 
-        assertThat(resp.getBookingid()).isNotNull();
-        assertThat(resp.getBooking().getTotalprice()).isEqualTo(999);
-        assertThat(resp.getBooking().getBookingDates().getCheckin()).isEqualTo("2026-08-10");
-        assertThat(resp.getBooking().getDepositpaid()).isTrue();
+        CreateBookingResponse createBookingResponse = resp.as(CreateBookingResponse.class);
+        assertThat(createBookingResponse.getBookingid()).isNotNull();
+        assertThat(createBookingResponse.getBooking().getTotalprice()).isEqualTo(999);
+        assertThat(createBookingResponse.getBooking().getBookingdates().getCheckin()).isEqualTo("2026-08-10");
+        assertThat(createBookingResponse.getBooking().getDepositpaid()).isTrue();
     }
 
-    private static CreateBookingDTO bookingRequest() {
-        CreateBookingDTO booking = new CreateBookingDTO();
-        booking.setFirstname("Vladimir");
-        booking.setLastname("Putin");
-        booking.setTotalprice(999);
-        booking.setDepositpaid(true);
-        booking.setBookingDates(new BookingDates("2026-08-10", "2027-08-10"));
-        booking.setAdditionalneeds("money");
+    @Test
+    void updateBookingTest() {
+        Response createResp = bookingClient.createBooking(buildBookingRequest());
+        assertThat(createResp.getStatusCode()).isEqualTo(200);
 
-        return booking;
+        BookingDTO bookingDTO = buildBookingRequest();
+        Response updateResponse = bookingClient
+                .updateBooking(bookingDTO, createResp.as(CreateBookingResponse.class).getBookingid());
+
+        assertThat(updateResponse.getStatusCode()).isEqualTo(200);
+
+        BookingDTO updatedBookingDTO = updateResponse.as(BookingDTO.class);
+        assertThat(updatedBookingDTO.equals(bookingDTO)).isTrue();
     }
 
-    private static CreateBookingDTO buildBookingRequest() {
-        return CreateBookingDTO.builder()
-                .firstname("Vladimir")
-                .lastname("Putin")
-                .totalprice(999)
-                .depositpaid(true)
-                .bookingDates(BookingDates.builder()
+    private static BookingDTO buildBookingRequest() {
+        return BookingDTO.builder()
+                .firstname(faker.name().firstName())
+                .lastname(faker.name().lastName())
+                .totalprice(faker.number().numberBetween(1000, 10000))
+                .depositpaid(faker.bool().bool())
+                .bookingdates(BookingDates.builder()
                         .checkin("2026-08-10")
                         .checkout("2027-08-10")
                         .build())
-                .additionalneeds("money")
+                .additionalneeds(faker.videoGame().title())
                 .build();
     }
 }

@@ -5,16 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreateBookingDTO {
+public class BookingDTO {
     private String firstname;
     private String lastname;
     private Integer totalprice;
     private Boolean depositpaid;
-    private BookingDates bookingDates;
+    private BookingDates bookingdates;
     private String additionalneeds;
 
     @Data
@@ -25,5 +27,4 @@ public class CreateBookingDTO {
         private String checkin;
         private String checkout;
     }
-
 }
